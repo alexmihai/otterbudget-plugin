@@ -1,0 +1,13 @@
+{
+  "name": "otterbudget-plugin",
+  "owner": { "name": "OtterBudget" },
+  "description": "Your OtterBudget portfolio in Claude: the connection to the OtterBudget MCP server and a skill for year-to-date gains on stocks and ETFs. Needs an invited OtterBudget account.",
+  "plugins": [
+    {
+      "name": "otterbudget",
+      "source": "./otterbudget",
+      "version": "1.0.0",
+      "description": "Your OtterBudget portfolio in Claude: the connection to the OtterBudget MCP server and a skill for year-to-date gains on stocks and ETFs. Needs an invited OtterBudget account."
+    }
+  ]
+}
