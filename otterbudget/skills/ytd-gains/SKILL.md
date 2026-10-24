@@ -11,7 +11,7 @@ Compute Active YTD, Closed YTD and Total YTD for the stocks and ETFs of the conn
 
 - The ask is for gains, returns or performance this year, YTD or year to date, for the portfolio, its stocks and ETFs, one ticker or one broker. Answer it.
 - The ask names another period. Answer "This computes the current calendar year only, from 1 January to today." and give no figure.
-- The ask covers bonds or deposits. Give no figure for them and say "Bond and deposit gains are not computed here, because the OtterBudget tools do not give a bond's last coupon date or the deposits that matured and were archived this year; Gains YTD on the Dashboard includes them." An ask about the whole portfolio gets the stocks and ETFs answer with that sentence.
+- The ask covers bonds or deposits. Give no figure for them and say "Bond and deposit gains are not computed here, because the OtterBudget tools do not give a bond's last coupon date or a computed total for the deposits that matured or were cancelled this year; Gains YTD on the Dashboard includes them." An ask about the whole portfolio gets the stocks and ETFs answer with that sentence.
 - The OtterBudget tools are not available to you. Answer "OtterBudget is not connected. In claude.ai, Desktop or Cowork, open the plugin's Connectors tab and choose Connect. In Claude Code, run /mcp and choose Authenticate." and give no figure.
 - A tool says the connection has no portfolio or lacks portfolio:read. Answer "This connection cannot read a portfolio. Reconnect and approve portfolio:read, or ask a household admin for Investments access." and give no figure.
 
