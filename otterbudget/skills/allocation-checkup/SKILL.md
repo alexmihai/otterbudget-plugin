@@ -21,7 +21,7 @@ Read where the connected OtterBudget portfolio is concentrated or off its target
 2. Shares by currency: `get_allocation` with type `all` and `by` `currency`.
 3. CFD lots, quotes and prices: `list_holdings`. Each broker part of a holding has a `cfd` block (notional, value, unrealized) and lots with their margin. A CFD lot has instrument `cfd`.
 4. Themes: `list_themes`, only when the ask names a theme. Give that theme's value and share.
-5. Cash: `list_cash_balances`, only when the ask is about cash.
+5. Cash: the broker rows of `list_cash_balances`, only when the ask is about the portfolio's cash.
 
 ## Figures
 

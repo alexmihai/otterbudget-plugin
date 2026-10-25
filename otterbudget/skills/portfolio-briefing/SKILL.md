@@ -85,4 +85,4 @@ Every amount carries its currency code, and every change its sign.
 - CFD exposure or concentration: `allocation-checkup`.
 - The watchlist: `watchlist-review`.
 - Coupons, maturities or payouts asked on their own: `upcoming-payouts`.
-- One broker's cash balance: the server's guidance.
+- One broker's cash balance: `cash-check`.

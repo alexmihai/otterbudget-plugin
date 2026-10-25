@@ -1,6 +1,6 @@
 ---
 name: spending-check
-description: Compares the member's OtterBudget spending with the budget for a month or the year to date, in RON, and says how many months broker cash and deposits would cover. Use for budgets, spending and an emergency fund. Not for adding an expense (log-expense) or investment gains (ytd-gains).
+description: Compares the member's OtterBudget spending with the budget for a month or the year to date, in RON, and says how many months broker cash and deposits would cover. Use for budgets, spending and an emergency fund. Not for adding an expense (log-expense), investment gains (ytd-gains) or how much cash the member holds (cash-check).
 ---
 
 # Spending check
@@ -49,10 +49,11 @@ All amounts are in RON, with the currency code and, for a change, the sign.
 3. When the year has a lump-sum category, give the lump-sum line.
 4. Give this month against last month, and say that the comparison counts all spending.
 5. Give the profile's year to date only when asked.
-6. Give the coverage line only when the ask is about a cushion, an emergency fund or months covered. It gives broker cash, deposits, the average monthly spending with the number of months it averages, and the months covered. Say that bank current accounts are not in the app and that a deposit may be locked until it matures. Add one "Prices as of" line with the read's `asOf` time.
+6. Give the coverage line only when the ask is about a cushion, an emergency fund or months covered. It gives broker cash, deposits, the average monthly spending with the number of months it averages, and the months covered. Say that current accounts and physical cash are not counted and that a deposit may be locked until it matures. Add one "Prices as of" line with the read's `asOf` time.
 7. When the connection has a spending profile but lacks portfolio:read or has no portfolio, give the spending part and, in place of the coverage line, "The coverage line needs portfolio:read too."
 8. Give the reasons for the marks once, under the answer.
 
 ## Hand-offs
 
 - Adding, scheduling, changing, deleting or stopping an expense: `log-expense`.
+- How much cash the member holds, or where: `cash-check`.
