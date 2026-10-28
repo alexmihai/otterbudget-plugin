@@ -16,7 +16,7 @@ Compare the connected spending profile's spending with its budget, in RON, for a
 
 ## Inputs
 
-1. The month: `get_spending_summary` with `month` as YYYY-MM. It gives `totalRon`, `yearToDateRon`, `yearlyBudgetRon` and, per category, `spent`, `budget`, `left` (null when the category has no budget), `yearToDate`, `yearlyBudget` and `lumpSum`.
+1. The month: `get_spending_summary` with `month` as YYYY-MM. It gives `totalRon`, `yearToDateRon`, `yearlyBudgetRon` and, per category, `spent`, `budget`, `left` (null when the category has no budget), `yearToDate`, `yearlyBudget` and `lumpSum`. `lumpSum` is a category's yearly budget and `yearlyBudget` is its total budget (its twelve monthly amounts with its yearly budget).
 2. The previous month, for the comparison: `get_spending_summary` for the month before.
 3. The largest expenses of a category: `list_spending_transactions` with `month` and `category`. It lists 50 to a page; read every page up to `total`, then sort by `amountRon`. When the ask names a category in its own words, match it to a name from `list_spending_categories`.
 4. Repeating expenses, only when the ask is about them: `list_scheduled_expenses`.
@@ -26,13 +26,13 @@ Compare the connected spending profile's spending with its budget, in RON, for a
 
 All amounts are in RON, with the currency code and, for a change, the sign.
 
-- Class of a category, from the month's summary: monthly when `yearlyBudget` is above `lumpSum`; lump-sum when `lumpSum` is above 0 and equals `yearlyBudget`; no budget when `yearlyBudget` is 0.
-- Month spending: the sum of `spent` over the monthly and no-budget categories. A lump-sum category's spending is not in the month spending. Month budget: the sum of `budget` over the same categories.
+- Class of a category, from the month's summary: monthly when `yearlyBudget` is above `lumpSum`; yearly-budget when `lumpSum` is above 0 and equals `yearlyBudget`; no budget when `yearlyBudget` is 0.
+- Month spending: the sum of `spent` over the monthly and no-budget categories. A yearly-budget category's spending is not in the month spending. Month budget: the sum of `budget` over the same categories.
 - Left: budget minus spending. Below zero, give it as "<amount> over".
 - A category over budget: its `left` is below 0. Its overage is the absolute value. A category whose `budget` is 0 is never over budget.
-- Lump-sum line: only while the year has a lump-sum category. Give the lump-sum categories' `spent` this month, and the sum of their `yearToDate` against the sum of their `lumpSum`, with left or over, every time. When the year has no lump-sum category, give no lump-sum line.
-- When the ask names a lump-sum category, give its `yearToDate` against its `lumpSum`.
-- This month against last month: this month's `totalRon` minus last month's, and that change over last month's. With no spending last month, give the amount and a dash for the percent. For the current month, say it is the month so far. The comparison with last month counts all spending.
+- Yearly-budget line: only while the year has a yearly-budget category. Give the yearly-budget categories' `spent` this month, and the sum of their `yearToDate` against the sum of their `lumpSum` (the yearly budgets), with left or over, every time. When the year has no yearly-budget category, give no yearly-budget line.
+- When the ask names a yearly-budget category, give its `yearToDate` against its `lumpSum`.
+- This month against last month: this month's monthly-budget spending (the `spent` of its monthly and no-budget categories, each month classed from its own summary) minus last month's, and that change over last month's. With no monthly-budget spending last month, give the amount and a dash for the percent. For the current month, say it is the month so far. The comparison with last month counts monthly-budget spending.
 - With no budget for the month, give the amount spent and "No budget", with no left and no percent.
 - Year to date: the profile's year to date is `yearToDateRon`, with `yearlyBudgetRon` beside it and the categories' `yearToDate`. Give it only when the member asks for it.
 - Coverage: (broker cash + deposits) divided by the average monthly spending of all categories (`totalRon`) over the last six complete months, in months with one decimal. A complete month is a past calendar month; the current month is never one. Months before the first month with any spending do not exist yet. When fewer than six complete months exist, average the complete months there are and name how many. When none exists, give no coverage line and say that no complete month of spending exists yet.
@@ -46,8 +46,8 @@ All amounts are in RON, with the currency code and, for a change, the sign.
 
 1. Open with the month against its budget: the month spending, the month budget, and left or over.
 2. List the categories over budget, largest overage first, each with its overage and its three largest expenses (date, note, amount in RON). Say so when none is over.
-3. When the year has a lump-sum category, give the lump-sum line.
-4. Give this month against last month, and say that the comparison counts all spending.
+3. When the year has a yearly-budget category, give the yearly-budget line.
+4. Give this month against last month, and say that the comparison counts monthly-budget spending.
 5. Give the profile's year to date only when asked.
 6. Give the coverage line only when the ask is about a cushion, an emergency fund or months covered. It gives broker cash, deposits, the average monthly spending with the number of months it averages, and the months covered. Say that current accounts and physical cash are not counted and that a deposit may be locked until it matures. Add one "Prices as of" line with the read's `asOf` time.
 7. When the connection has a spending profile but lacks portfolio:read or has no portfolio, give the spending part and, in place of the coverage line, "The coverage line needs portfolio:read too."
