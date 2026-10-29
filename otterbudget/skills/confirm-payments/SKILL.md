@@ -37,8 +37,8 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
 
 1. Match the member's word to a payment by its merchant, amount or date. When more than one fits, list them and ask which one.
 2. Match the member's category to one of the household's open categories with `list_spending_categories`, by name ignoring case or by clear meaning. Show the matched name. When none fits, list the categories and ask which one. Create no category.
-3. Show the amount with its currency, date, category and account, for example "RON 86.40, 17 Oct 2026, Groceries, ING RON", and end with "Save it?". Call no write.
-4. Call `confirm_payment` once, with `paymentId` and `category`, only when the member's next message is a plain yes, such as "yes", "save" or "ok". When the next message changes a field, show a new summary and end with "Save it?" again. After any other reply, save nothing, answer it, then show the summary and "Save it?" again before a yes counts.
+3. Show the amount with its currency, date, category and account, for example "RON 86.40, 17 Oct 2026, Groceries, ING RON", and end with "Save or change?". Call no write.
+4. Call `confirm_payment` once, with `paymentId` and `category`, only when the member's next message is a plain yes, such as "yes", "save" or "ok". When the next message changes a field, show a new summary and end with "Save or change?" again. When the member answers "change" and names no field, ask what to change and save nothing. After any other reply, save nothing, answer it, then show the summary and "Save or change?" again before a yes counts.
 5. After the save, name the expense the answer gives. When the answer says the payment was already confirmed, say so and change nothing else.
 
 ## Confirm all the suggested ones
@@ -52,12 +52,12 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
 
 Show the payment and the expense in `duplicateOf`, and ask whether it is the same expense or another one.
 
-- Same: show "Same as the expense of `<date>`, `<amount>`, `<category>`. No expense is added." and end with "Save it?". After a plain yes, call `confirm_payment` with `sameExpense` true.
+- Same: show "Same as the expense of `<date>`, `<amount>`, `<category>`. No expense is added." and end with "Save or change?". After a plain yes, call `confirm_payment` with `sameExpense` true.
 - Another one: it needs a category. Confirm it as above.
 
 ## Another currency
 
-A payment with the reason `other_currency` needs its amount in RON or EUR before you show its summary. Ask "Give the amount in RON or EUR.", show the summary with that amount and currency, and after a plain yes call `confirm_payment` with the category, `amount` and `currency`. Calling it without them is refused.
+A payment with the reason `other_currency` needs its amount in RON or EUR before you show its summary. Ask "Give the amount in RON or EUR.", show the summary with that amount and currency and end with "Save or change?". After a plain yes call `confirm_payment` with the category, `amount` and `currency`. Calling it without them is refused.
 
 ## A move
 

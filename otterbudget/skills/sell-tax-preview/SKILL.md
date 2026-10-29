@@ -46,7 +46,7 @@ For each distinct choice, call `add_position` with `ticker`, `exchange` when nee
 - Leave `costPriceOverride` out so each choice uses the broker's cost method. Do not add a tax rate or compute tax yourself.
 - A changed input needs new previews without `reviewed`. A refused or incomplete preview supplies no tax or net figure; explain its tool error instead of estimating them.
 
-When the member says to sell, hand over to `log-trade`, which previews again and asks "Save it?". This skill never confirms or saves a trade.
+When the member says to sell, hand over to `log-trade`, which previews again and asks "Save or change?". This skill never confirms or saves a trade.
 
 ## The answer
 
