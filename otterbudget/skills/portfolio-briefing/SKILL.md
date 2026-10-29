@@ -1,6 +1,6 @@
 ---
 name: portfolio-briefing
-description: "Briefs the member on their OtterBudget portfolio today or this week: value and change, the largest movers, stale prices, negative cash, lines off target and payouts due in 30 days. Use for today, this morning or this week. Never for this year (ytd-gains) or the watchlist (watchlist-review)."
+description: "Briefs the member on their OtterBudget portfolio today or this week: value and change, the largest movers, stale prices, negative cash, lines off target and payouts due in 30 days. Use for today, this morning or this week. Never for this year (ytd-gains), the watchlist (watchlist-review) or changes to the app (whats-new)."
 ---
 
 # Portfolio briefing
