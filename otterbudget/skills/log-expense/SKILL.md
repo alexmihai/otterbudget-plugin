@@ -1,6 +1,6 @@
 ---
 name: log-expense
-description: Adds, schedules, corrects, deletes or stops expenses in the member's OtterBudget spending profile, in RON or EUR, from one of their accounts, after a yes in the chat. Use when the member tells you an expense or a repeating one, or asks to change one this client added. Not for budget questions (spending-check) or an account's balance (cash-check).
+description: Adds, schedules, corrects, deletes or stops expenses in the member's OtterBudget spending profile, in RON or EUR, from one of their accounts, after a yes in the chat. Use when the member tells you an expense or a repeating one, or asks to change one this client added. Not for budget questions (spending-check), an account's balance (cash-check) or a bank payment waiting to be confirmed (confirm-payments).
 ---
 
 # Log an expense
@@ -10,7 +10,7 @@ Add or schedule an expense in the connected OtterBudget spending profile, or cor
 ## When it applies
 
 - The member tells you an expense to add, a repeating one to schedule, or asks to change, delete or stop one. Do it.
-- The ask is about a budget or spending totals. Use the hand-off below.
+- The ask is about a budget or spending totals, or a bank payment waiting to be confirmed. Use the hand-offs below.
 - The OtterBudget tools are not available to you. Answer "OtterBudget is not connected. In claude.ai, Desktop or Cowork, open the plugin's Connectors tab and choose Connect. In Claude Code, run /mcp and choose Authenticate." and do nothing else.
 - A tool says the connection cannot read a spending profile. Answer "This connection cannot read a spending profile. Reconnect and approve spending:read, or ask a household admin for Spending read access." and call no tool.
 - You know the connection lacks `spending:write`, or a write tool says so. Answer "This connection cannot save expenses. Reconnect and approve spending:write, or ask a household admin for Spending write access." and call no write.
@@ -48,7 +48,7 @@ Only an expense or a schedule that this client added can be changed. The server 
    - Delete: the expense's amount, currency, category, account, date and note.
    - Stop: the schedule's amount, currency, category, account, repeat and next date. Say that the expenses it already added stay.
 3. On a plain yes, call `update_spending_transaction`, `delete_spending_transaction` or `stop_scheduled_expense` once, with that `id`. Only the member's next message answers the summary. When it changes a field, show a new summary and "Save it?". After any other reply, save nothing, answer it, then show the summary and "Save it?" again before a yes counts.
-4. When the server refuses because another client added it, give the server's refusal sentence as it is. Change nothing else.
+4. When the server refuses because another client added it, or because the bank added it, give the server's refusal sentence as it is and say that the app edits it. Change nothing else.
 
 ## Several expenses
 
@@ -67,3 +67,5 @@ After a save, give the saved fields in the same words as the summary, and say it
 - Budgets or spending totals: `spending-check`.
 - An account's balance: `cash-check`.
 - Setting an account's or a broker's balance: no skill; the tool's own description says how.
+- A bank payment waiting to be confirmed: `confirm-payments`.
+- Moving money between accounts: the app's Move money on Cash; no skill.

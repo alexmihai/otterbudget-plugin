@@ -1,6 +1,6 @@
 # OtterBudget plugin
 
-The OtterBudget plugin connects Claude to your OtterBudget portfolio and spending. It adds the connection to the OtterBudget MCP server and eleven skills: `ytd-gains`, `log-trade`, `allocation-checkup`, `rebalance-plan`, `watchlist-review`, `spending-check`, `upcoming-payouts`, `portfolio-briefing`, `log-expense`, `sell-tax-preview` and `cash-check`. You need an OtterBudget account. The owner must invite you first.
+The OtterBudget plugin connects Claude to your OtterBudget portfolio and spending. It adds the connection to the OtterBudget MCP server and twelve skills: `ytd-gains`, `log-trade`, `allocation-checkup`, `rebalance-plan`, `watchlist-review`, `spending-check`, `upcoming-payouts`, `portfolio-briefing`, `log-expense`, `sell-tax-preview`, `cash-check` and `confirm-payments`. You need an OtterBudget account. The owner must invite you first.
 
 ## Install
 
