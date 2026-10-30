@@ -17,12 +17,13 @@ Tell the member how much cash they hold in the connected OtterBudget portfolio a
 
 ## Inputs
 
-1. `list_cash_balances`, once. It gives two lists: `accounts`, the household's current accounts, and the broker rows, one per broker and currency. Each carries its amount, its last-updated stamp and whether it is archived. Each account also carries its name, its currency, whether it is the default, its bank, its owner (a member's name, or null for Shared) and whether it is linked; each broker row its broker's name.
+1. `list_cash_balances`, once. It gives two lists: `accounts`, the household's current accounts, and the broker rows, one per broker and currency. Each carries its amount, its last-updated stamp and whether it is archived. Each account also carries its name, which is its shown name with its owner's first name in front ("Alex ING RON"), its currency, whether it is the default, its bank, its owner (a member's name, or null for Shared), whether it is linked and its `parts`: for a linked account, each of its bank accounts with its `name`, `last4`, `currency`, `balance` and `readAt`, and for a typed account an empty list; each broker row its broker's name.
 
 ## Figures
 
 - Every typed balance shows the date of its last update, as in "updated 20 Oct 2026", because a typed balance can be old.
 - A linked account's balance comes from its bank, not from a member's typing. Show it as "from `<bank>`" with the date and time of its last read (its `updatedAt`), as in "from ING, read 28 Oct 2026, 14:05", in place of the updated date.
+- A grouped account is a linked account with two or more `parts`. Its `balance` is the sum of its parts and its `updatedAt` is the oldest of their reads. Give its balance and that time, then its parts under it, each as "`<name>` •••• `<last4>` `<balance>`" in the account's currency, in the order given. Never add the parts to the balance again: a total counts the account once, at its `balance`.
 - A balance below 0 keeps its sign.
 - Never add amounts of different currencies and never convert one. Read no rate.
 - A total is the sum of the balances in one currency: every account and every broker row listed, and every archived one with a balance other than 0.
@@ -32,12 +33,12 @@ Tell the member how much cash they hold in the connected OtterBudget portfolio a
 
 The ask names no account and no broker. Give, in this order:
 
-1. Each open account with its balance and date, and each account's bank and owner when `list_cash_balances` gives them (Shared for a null owner; leave out what it does not give), the default account first, then any archived account with a balance other than 0, marked as archived.
+1. Each open account, named as the tool returns it, with its balance and date, a grouped account's parts under it, and each account's bank and owner when `list_cash_balances` gives them (Shared for a null owner; leave out what it does not give), the default account first, then any archived account with a balance other than 0, marked as archived.
 2. Each broker's cash, per currency, with its date, archived brokers with a balance other than 0 marked as archived.
 3. One total per currency.
 4. Under the totals: "For one total in your reporting currency, see the Cash page." and a note that deposits are not cash and are left out.
 
-The ask names one account or one broker. Match the name to an account or a broker, ignoring case or by clear meaning ("my ING card" to ING RON). Give that one's balances with their dates, and an account's bank and owner, and nothing else: no totals, no Cash page sentence and no note on deposits. When the name fits none, list the accounts and the brokers and ask which one.
+The ask names one account or one broker. Match the name to an account or a broker, ignoring case, with or without the owner's first name ("ING RON" or "Alex ING RON" is Alex ING RON), or by clear meaning ("my ING card" to ING RON). Give that one's balances with their dates, an account's bank and owner, and a grouped account's parts, and nothing else: no totals, no Cash page sentence and no note on deposits. When the name fits none, list the accounts and the brokers and ask which one.
 
 Do not add an expense, give a coverage figure or give a portfolio value.
 

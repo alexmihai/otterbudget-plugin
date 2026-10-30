@@ -22,29 +22,30 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
 ## List the payments
 
 1. Call `list_payments_to_confirm` once. When `truncated` is true, say that only the newest are listed and give `total`.
-2. For each payment give the amount with its currency, the date, the note, the account, and why it waits (its `reason`):
+2. For each payment give the amount with its currency, the date, the note, the account as the tool names it (its shown name, with its owner's first name in front), and why it waits (its `reason`). A USD payment with a `ronAmount` reads "USD 15.49, RON 69.86 at 1 USD = 4.51 RON on 17 Oct 2026", from its amount, `ronAmount`, `rate` and `rateDate`: it is saved as an expense in RON at that amount. Its reason is not `other_currency`, so it needs no amount from the member. The reasons:
    - `preselected`: the `suggestion` category, marked "suggested".
    - `pick`: the `choices`, as three category names.
    - `may_not_be_expense`: "May not be an expense", with the `choices`.
    - `deleted_last_time`: "Deleted last time", with the `choices`.
    - `possible_duplicate`: the expense in `duplicateOf` with its date, amount, category and account.
    - `move` and `same_move`: the account in `moveTo`, or the `moveChoices` when `moveTo` is null, and for `same_move` the move in `duplicateMove`.
-   - `other_currency`: the amount in the bank's currency and, in `originalAmount`, what the card paid.
+   - `other_currency`: the amount in the bank's currency and, in `originalAmount`, what the card paid. A USD payment with no `ronAmount` has this reason too, because no rate is stored for its day.
    - `category_not_suggested` and `no_categories`: no category is offered. Read the household's categories with `list_spending_categories` when the member names one.
 3. Call no write while you list.
+
 
 ## Confirm one payment
 
 1. Match the member's word to a payment by its merchant, amount or date. When more than one fits, list them and ask which one.
 2. Match the member's category to one of the household's open categories with `list_spending_categories`, by name ignoring case or by clear meaning. Show the matched name. When none fits, list the categories and ask which one. Create no category.
-3. Show the amount with its currency, date, category and account, for example "RON 86.40, 17 Oct 2026, Groceries, ING RON", and end with "Save or change?". Call no write.
-4. Call `confirm_payment` once, with `paymentId` and `category`, only when the member's next message is a plain yes, such as "yes", "save" or "ok". When the next message changes a field, show a new summary and end with "Save or change?" again. When the member answers "change" and names no field, ask what to change and save nothing. After any other reply, save nothing, answer it, then show the summary and "Save or change?" again before a yes counts.
+3. Show the amount with its currency, date, category and account, for example "RON 86.40, 17 Oct 2026, Groceries, ING RON", and end with "Save or change?". A USD payment with a `ronAmount` shows that RON amount in the summary, for example "USD 15.49, RON 69.86 at 1 USD = 4.51 RON, 17 Oct 2026, Subscriptions, ING USD": the expense is saved in RON at that amount. Call no write.
+4. Call `confirm_payment` once, with `paymentId` and `category` and no `amount`, also for a USD payment with a `ronAmount`, only when the member's next message is a plain yes, such as "yes", "save" or "ok". When the next message changes a field, show a new summary and end with "Save or change?" again. When the member answers "change" and names no field, ask what to change and save nothing. After any other reply, save nothing, answer it, then show the summary and "Save or change?" again before a yes counts.
 5. After the save, name the expense the answer gives. When the answer says the payment was already confirmed, say so and change nothing else.
 
 ## Confirm all the suggested ones
 
-1. List each payment whose `reason` is `preselected`, one line each with its amount and currency, date, category and account, and end with "Confirm these `<n>`?". Call no write.
-2. On a plain yes, make one `confirm_payment` call per listed payment, in its suggested category. Confirm no payment that you did not list. A payment of any other reason gets its own question.
+1. List each payment whose `reason` is `preselected`, one line each with its amount and currency, date, category and account, and end with "Confirm these `<n>`?". A USD payment with a `ronAmount` shows that RON amount in the summary, on its line. Call no write.
+2. On a plain yes, make one `confirm_payment` call per listed payment, in its suggested category, and send no `amount` or `currency` for any of them, a USD payment with a `ronAmount` included. Confirm no payment that you did not list. A payment of any other reason gets its own question.
 3. When a call fails, stop, say which payments were saved and which were not, and ask again before you call for the rest. Give the server's message.
 4. After any reply but a plain yes, save nothing.
 
@@ -57,7 +58,7 @@ Show the payment and the expense in `duplicateOf`, and ask whether it is the sam
 
 ## Another currency
 
-A payment with the reason `other_currency` needs its amount in RON or EUR before you show its summary. Ask "Give the amount in RON or EUR.", show the summary with that amount and currency and end with "Save or change?". After a plain yes call `confirm_payment` with the category, `amount` and `currency`. Calling it without them is refused.
+Only a payment with the reason `other_currency` needs its amount in RON or EUR before you show its summary; one that waits for any other reason is confirmed with no amount, and the server refuses an amount sent with it. Ask "Give the amount in RON or EUR.", show the summary with that amount and currency and end with "Save or change?". After a plain yes call `confirm_payment` with the category, `amount` and `currency`. Calling it without them is refused.
 
 ## A move
 
