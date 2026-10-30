@@ -1,6 +1,6 @@
 ---
 name: portfolio-briefing
-description: "Briefs the member on their OtterBudget portfolio today or this week: value and change, the largest movers, stale prices, negative cash, lines off target and payouts due in 30 days. Use for today, this morning or this week. Never for this year (ytd-gains), the watchlist (watchlist-review) or changes to the app (whats-new)."
+description: "Briefs the member on their OtterBudget portfolio today or this week: value and change, the largest movers, stale prices, negative cash, lines off target, payouts due in 30 days and earnings reports due in 7 days. Use for today, this morning or this week. Never for this year (ytd-gains), the watchlist (watchlist-review), changes to the app (whats-new), or an ask about earnings reports alone or about one report (earnings-preview)."
 ---
 
 # Portfolio briefing
@@ -11,6 +11,7 @@ Brief the member on the connected OtterBudget portfolio for today or for this we
 
 - The ask is for today, this morning, this week, or what moved. Answer it. An ask for the week gets "The week" below; any other ask gets "Today".
 - The ask is about this year or a past year. Hand over to `ytd-gains` and give no figure.
+- The ask is about one earnings report, or about earnings reports alone. Hand over to `earnings-preview`.
 - The ask names another period, such as a month. Answer "This covers today and this week only." and give no figure.
 - The OtterBudget tools are not available to you. Answer "OtterBudget is not connected. In claude.ai, Desktop or Cowork, open the plugin's Connectors tab and choose Connect. In Claude Code, run /mcp and choose Authenticate." and give no figure.
 - A tool says the connection has no portfolio or lacks portfolio:read. Answer "This connection cannot read a portfolio. Reconnect and approve portfolio:read, or ask a household admin for Investments read access." and give no figure.
@@ -22,7 +23,8 @@ Brief the member on the connected OtterBudget portfolio for today or for this we
 2. Cash: `list_cash_balances`, per broker and currency, archived brokers included.
 3. Targets and caps: `list_allocation_targets`. Each target has `subject`, `level`, `sharePct`, `targetPct`, `bandPts`, `driftPts` and `flags`. `caps.above` lists the lines above a cap.
 4. Payouts: `list_upcoming_payouts`, whose rows reach 31 December of next year (`to`). Keep the rows dated from today to 30 days after today.
-5. For the week only: the closes of the last sessions. Call `get_prices` with the `providerSymbol`s of the holdings (50 at most per call), `latestOnly` false, from 21 days before today to today. Call it for no holding without a `providerSymbol`.
+5. Earnings reports: `list_upcoming_earnings`, with no argument. Each row has `reportDate`, `ticker`, `name`, `timeMark` (`before_open`, `after_close` or null) and `estimated`. Keep the rows dated from today to 7 days after today, in the order the read gives them. Leave out the rows dated before today and the stocks in `noDate`.
+6. For the week only: the closes of the last sessions. Call `get_prices` with the `providerSymbol`s of the holdings (50 at most per call), `latestOnly` false, from 21 days before today to today. Call it for no holding without a `providerSymbol`.
 
 ## Today
 
@@ -55,13 +57,14 @@ The same for today and for the week.
 - Negative cash: every balance below 0, with its broker, currency and sign. Name an archived broker as archived. With none, say there is none.
 - Lines off target: the targets whose `flags` hold `above_target` or `below_target`, and the lines in `caps.above`. Name each line by its `subject`, with its share, its target and band or its cap. A line in both lists is named once. With `waitingForFx` true, say the lines wait for FX rates.
 - Payouts of the next 30 days: one row per payout, with its mark, date, name, broker or bank and amount in the reporting currency, with its own-currency amount beside it when it differs. Add the `amountReporting` of these rows for their total; do not take `total`, which counts every row to `to`. Leave out rows dated after 30 days from today and rows dated before today. Where `amountReporting` is null, give the own-currency amount, and say the total waits for FX rates. Amounts are gross.
+- Reports in the next 7 days: one row per kept report, with its date written as "19 Nov 2026", its ticker, its name, its time mark ("Before open" or "After close") when it has one, and "Estimated" with the mark Estimate when `estimated` is true. Give no figure and no note of a report. With no row, say "No earnings reports in the next 7 days." When `list_upcoming_earnings` fails, say "Earnings reports could not be read." and answer every other part.
 
 ## Marks
 
 Put the mark on the row and give each reason once under the answer.
 
 - Stale: the row's price is stale. Give that price's time.
-- Estimate: `previousEstimated` is true, or a close from `get_prices` is marked stale, which means estimated; or a payout is marked `estimate`; or the portfolio week change, as above.
+- Estimate: `previousEstimated` is true, or a close from `get_prices` is marked stale, which means estimated; or a payout is marked `estimate`; or the portfolio week change, as above; or a report's date is estimated, with the reason "Yahoo marks the date as estimated."
 - No price: the holding has no `quote`. Leave it out of the change and the movers, and say so.
 - Incomplete: a figure a step needs is missing, such as a previous close or a rate. Leave the row out of every figure that needs it and name it.
 - A bond or a deposit has no day change. Say once that the change covers the holdings with a quote.
@@ -74,8 +77,9 @@ Put the mark on the row and give each reason once under the answer.
 4. Give the negative cash balances.
 5. Give the lines off target or above a cap.
 6. Give the payouts of the next 30 days.
-7. Give one "Prices as of" line: the time of the oldest current price used.
-8. Give the reasons for the marks.
+7. Give the reports of the next 7 days, under the heading "Reports in the next 7 days".
+8. Give one "Prices as of" line: the time of the oldest current price used.
+9. Give the reasons for the marks.
 
 Every amount carries its currency code, and every change its sign.
 
@@ -86,3 +90,4 @@ Every amount carries its currency code, and every change its sign.
 - The watchlist: `watchlist-review`.
 - Coupons, maturities or payouts asked on their own: `upcoming-payouts`.
 - One broker's cash balance: `cash-check`.
+- One earnings report's date, figures or note, or an ask about earnings reports alone: `earnings-preview`.

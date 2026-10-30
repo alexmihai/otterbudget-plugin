@@ -1,6 +1,6 @@
 # OtterBudget plugin
 
-The OtterBudget plugin connects Claude to your OtterBudget portfolio and spending. It adds the connection to the OtterBudget MCP server and thirteen skills: `ytd-gains`, `log-trade`, `allocation-checkup`, `rebalance-plan`, `watchlist-review`, `spending-check`, `upcoming-payouts`, `portfolio-briefing`, `log-expense`, `sell-tax-preview`, `cash-check`, `confirm-payments` and `whats-new`. You need an OtterBudget account. The owner must invite you first.
+The OtterBudget plugin connects Claude to your OtterBudget portfolio and spending. It adds the connection to the OtterBudget MCP server and fourteen skills: `ytd-gains`, `log-trade`, `allocation-checkup`, `rebalance-plan`, `watchlist-review`, `spending-check`, `upcoming-payouts`, `portfolio-briefing`, `log-expense`, `sell-tax-preview`, `cash-check`, `confirm-payments`, `whats-new` and `earnings-preview`. You need an OtterBudget account. The owner must invite you first.
 
 ## Install
 
@@ -36,6 +36,17 @@ These clients get the connection only. The skills do not install there.
 3. Upload the zip file. Then connect the plugin on its Connectors tab, as in the steps above.
 
 An uploaded plugin does not update itself. See [Updates](#updates).
+
+## Pre-earnings notes
+
+The `earnings-preview` skill writes a note for each coming report of a stock you hold. To get the notes without asking, create a scheduled task in your own Claude client:
+
+1. Use a client that has this plugin and the OtterBudget connection. Approve the connection with `portfolio:read` and `research:write`.
+2. Create a Cowork scheduled task, or a Claude Code routine.
+3. Set it to run daily at 08:30 Bucharest time.
+4. Set its prompt to `Write the pre-earnings notes.`
+
+A connection works in one portfolio, so create one task for each portfolio. The app does not schedule the task. The task saves each note without asking for a yes. You can hide a note on the research page.
 
 ## Requirements
 
