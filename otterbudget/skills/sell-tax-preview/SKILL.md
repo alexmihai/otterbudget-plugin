@@ -42,7 +42,7 @@ For each distinct choice, call `add_position` with `ticker`, `exchange` when nee
 
 - Omit `reviewed` on every call. The response has `ready: false`, a `reviewed` digest and `preview`; this is not a saved trade. Never send that digest, including after "yes", "save", "ok" or "sell B".
 - Omit `fees` unless the member gives them, so the broker's stored fee rule supplies them. Send a named `swap` only for a CFD sell, signed in settlement currency; omitted swap is zero.
-- `settlementCurrency` defaults to the asset's trade currency. If the member chooses a different settlement currency, ask for `fxRateAtTrade` from trade currency to settlement currency; do not invent a rate. Fees and swap are in settlement currency.
+- `settlementCurrency` defaults to the asset's trade currency. If the member chooses a different settlement currency, leave `fxRateAtTrade` out: `add_position` fills it from the stored close of the sell date, or the closest earlier one. Show the preview's rate and the date of its close in the answer. Ask the member for a rate only after `add_position` refuses with "Enter an FX rate at trade."; do not invent one. Send a rate the member names as given. Fees and swap are in settlement currency.
 - Leave `costPriceOverride` out so each choice uses the broker's cost method. Do not add a tax rate or compute tax yourself.
 - A changed input needs new previews without `reviewed`. A refused or incomplete preview supplies no tax or net figure; explain its tool error instead of estimating them.
 
