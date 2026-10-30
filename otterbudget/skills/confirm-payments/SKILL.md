@@ -28,6 +28,7 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
    - `may_not_be_expense`: "May not be an expense", with the `choices`.
    - `deleted_last_time`: "Deleted last time", with the `choices`.
    - `possible_duplicate`: the expense in `duplicateOf` with its date, amount, category and account.
+   - `transfer`: the account in `transferTo`, such as "RON 500.00 from Alex Revolut RON to Ana ING RON", a transfer between the household's accounts that adds no expense.
    - `move` and `same_move`: the account in `moveTo`, or the `moveChoices` when `moveTo` is null, and for `same_move` the move in `duplicateMove`.
    - `other_currency`: the amount in the bank's currency and, in `originalAmount`, what the card paid. A USD payment with no `ronAmount` has this reason too, because no rate is stored for its day.
    - `category_not_suggested` and `no_categories`: no category is offered. Read the household's categories with `list_spending_categories` when the member names one.
@@ -45,7 +46,7 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
 ## Confirm all the suggested ones
 
 1. List each payment whose `reason` is `preselected`, one line each with its amount and currency, date, category and account, and end with "Confirm these `<n>`?". A USD payment with a `ronAmount` shows that RON amount in the summary, on its line. Call no write.
-2. On a plain yes, make one `confirm_payment` call per listed payment, in its suggested category, and send no `amount` or `currency` for any of them, a USD payment with a `ronAmount` included. Confirm no payment that you did not list. A payment of any other reason gets its own question.
+2. On a plain yes, make one `confirm_payment` call per listed payment, in its suggested category, and send no `amount` or `currency` for any of them, a USD payment with a `ronAmount` included. Confirm no payment that you did not list. A payment of any other reason, a transfer included, gets its own question.
 3. When a call fails, stop, say which payments were saved and which were not, and ask again before you call for the rest. Give the server's message.
 4. After any reply but a plain yes, save nothing.
 
@@ -67,6 +68,15 @@ A payment with the reason `move` is money moved between the household's accounts
 1. Show the two accounts and the amount, such as "RON 500.00 from ING RON to Physical cash", and ask "Move it?". Offer only the accounts in `moveChoices` as the target; a `moveTo` is the suggested one. Call no write.
 2. After a plain yes, call `confirm_payment` with `moveTo`.
 3. For `same_move`, show the move in `duplicateMove` and ask whether it is the same move. After a plain yes call `confirm_payment` with `sameMove` true. For another one, treat it as a `move`.
+
+## A transfer
+
+A payment with the reason `transfer` matches money that came into another of the household's accounts. It is not an expense.
+
+1. Show the amount with its currency, the date and both accounts, the payment's `account` and `transferTo`, such as "RON 500.00 from Alex Revolut RON to Ana ING RON, 17 Oct 2026. No expense is added.", and ask "Is it a transfer between your accounts?". Call no write.
+2. After a plain yes, call `confirm_payment` once with `paymentId` and `transfer` true, and nothing else. Give the transfer the answer names.
+3. When the member says it is not a transfer, treat it as a payment that needs a category, and confirm it as above with `category`, or with `moveTo` for a move to an open account. Either one leaves the money in free for another payment.
+4. The server refuses `transfer` for a payment that is not a transfer to confirm. Give its message.
 
 ## Delete a payment
 
