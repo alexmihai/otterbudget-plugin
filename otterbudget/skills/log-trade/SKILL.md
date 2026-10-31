@@ -45,6 +45,8 @@ Resolve every field from the message and the reads before you ask anything. Gues
 1. Find the lot from `get_holding` and `list_transactions`.
 2. When more than one lot matches, list them with their dates and prices, ask which one, and call no write.
 3. Call `update_position` with the lot's `id` and only the fields to change, or `delete_position` with its `id`, each without `reviewed`. Show the summary as set out in "The summary". For a delete, show the lot and the cash it returns.
+4. The member says a buy was at another broker ("The June VWCE buy was at Tradeville, not XTB."). To move a buy to another broker, call `update_position` once without `reviewed`, with the lot's `id` and `broker` set to the new broker. Send `settlementCurrency` only when the member names one.
+5. A refusal of a move (a sell, a sell that depends on the buy, an archived broker, no account in that currency): give the tool's line as it is and save nothing. For a sell it reads "Only a buy moves to another broker. Delete this sell, move the buy, then add the sell again."
 
 ## The summary
 
@@ -53,6 +55,7 @@ Show one summary and end it with "Save or change?". It holds, in this order:
 1. For a new trade: the asset, the broker, the side, the instrument, the quantity, the price, the date, the settlement currency, and the FX rate and the lots where they apply. Each guess shows its alternatives in brackets.
 2. The preview's figures: gross, fees, swap, tax, net and the cash after. For a new trade, name the fee as the broker's rule gives it. Then list each recorded sell the write recomputes, by its date, with its new figures.
 3. "Looks already recorded", where it applies.
+4. For a move: the old and the new broker (XTB → Tradeville) and, for each account, its cash change and its cash after, named by its broker and currency (+€1,124.00 for EUR at XTB, −€1,124.00 for EUR at Tradeville).
 
 ## The yes
 
