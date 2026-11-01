@@ -32,7 +32,8 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
    - `move` and `same_move`: the account in `moveTo`, or the `moveChoices` when `moveTo` is null, and for `same_move` the move in `duplicateMove`.
    - `other_currency`: the amount in the bank's currency and, in `originalAmount`, what the card paid. A USD payment with no `ronAmount` has this reason too, because no rate is stored for its day.
    - `category_not_suggested` and `no_categories`: no category is offered. Read the household's categories with `list_spending_categories` when the member names one.
-3. Call no write while you list.
+3. When `pending` holds a row, say after the payments "3 payments pending. They can be confirmed once the bank clears them." with the actual count, or for one row "1 payment pending. It can be confirmed once the bank clears it.". Give `pendingAsOf` as the as-of time, and list each row as "Pending · RON 86.40 · 30 Oct 2026 · Alex ING RON": the amount with its currency, the date or "No date", and the account. A pending row is not a payment to confirm: it has no `reason` and no category, and `total` does not count it. When the member asks to confirm, file, match, move or delete a pending row, say that it can be confirmed once the bank clears it. Call no write for a pending row.
+4. Call no write while you list.
 
 
 ## Confirm one payment
