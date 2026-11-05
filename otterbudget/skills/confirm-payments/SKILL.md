@@ -1,6 +1,6 @@
 ---
 name: confirm-payments
-description: "Walks the member through the bank payments waiting in their OtterBudget spending profile: shows each one's amount, date, category and account, then confirms, matches, moves or deletes it after a yes in the chat. Use when the member asks what is waiting to confirm, or to confirm, file, move or delete bank payments. Not for an expense the bank did not send (log-expense) or budgets (spending-check)."
+description: "Walks the member through the bank payments of their own bank links that wait in their OtterBudget spending profile: shows each one's amount, date, category and account, then confirms, matches, moves or deletes it after a yes in the chat. Use when the member asks what is waiting to confirm, or to confirm, file, move or delete bank payments. Not for an expense the bank did not send (log-expense) or budgets (spending-check)."
 ---
 
 # Confirm bank payments
@@ -21,7 +21,7 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
 
 ## List the payments
 
-1. Call `list_payments_to_confirm` once. When `truncated` is true, say that only the newest are listed and give `total`.
+1. Call `list_payments_to_confirm` once. The list holds only the payments of the member's own bank links. When `truncated` is true, say that only the newest are listed and give `total`.
 2. For each payment give the amount with its currency, the date, the note, the account as the tool names it (its shown name, with its owner's first name in front), and why it waits (its `reason`). A USD payment with a `ronAmount` reads "USD 15.49, RON 69.86 at 1 USD = 4.51 RON on 17 Oct 2026", from its amount, `ronAmount`, `rate` and `rateDate`: it is saved as an expense in RON at that amount. Its reason is not `other_currency`, so it needs no amount from the member. The reasons:
    - `preselected`: the `suggestion` category, marked "suggested".
    - `pick`: the `choices`, as three category names.
@@ -34,11 +34,12 @@ Show the bank payments that wait in the connected OtterBudget spending profile, 
    - `category_not_suggested` and `no_categories`: no category is offered. Read the household's categories with `list_spending_categories` when the member names one.
 3. When `pending` holds a row, say after the payments "3 payments pending. They can be confirmed once the bank clears them." with the actual count, or for one row "1 payment pending. It can be confirmed once the bank clears it.". Give `pendingAsOf` as the as-of time, and list each row as "Pending · RON 86.40 · 30 Oct 2026 · Alex ING RON": the amount with its currency, the date or "No date", and the account. A pending row is not a payment to confirm: it has no `reason` and no category, and `total` does not count it. When the member asks to confirm, file, match, move or delete a pending row, say that it can be confirmed once the bank clears it. Call no write for a pending row.
 4. Call no write while you list.
+5. When the member asks about a payment that the list does not hold, such as one paid from another member's account, or when no listed payment fits the member's word, answer "Only the member who linked a bank account sees and confirms its payments." and call no write.
 
 
 ## Confirm one payment
 
-1. Match the member's word to a payment by its merchant, amount or date. When more than one fits, list them and ask which one.
+1. Match the member's word to a payment by its merchant, amount or date. When more than one fits, list them and ask which one. When none fits, give the answer of the last List step and call no write.
 2. Match the member's category to one of the household's open categories with `list_spending_categories`, by name ignoring case or by clear meaning. Show the matched name. When none fits, list the categories and ask which one. Create no category.
 3. Show the amount with its currency, date, category and account, for example "RON 86.40, 17 Oct 2026, Groceries, ING RON", and end with "Save or change?". A USD payment with a `ronAmount` shows that RON amount in the summary, for example "USD 15.49, RON 69.86 at 1 USD = 4.51 RON, 17 Oct 2026, Subscriptions, ING USD": the expense is saved in RON at that amount. Call no write.
 4. Call `confirm_payment` once, with `paymentId` and `category` and no `amount`, also for a USD payment with a `ronAmount`, only when the member's next message is a plain yes, such as "yes", "save" or "ok". When the next message changes a field, show a new summary and end with "Save or change?" again. When the member answers "change" and names no field, ask what to change and save nothing. After any other reply, save nothing, answer it, then show the summary and "Save or change?" again before a yes counts.
