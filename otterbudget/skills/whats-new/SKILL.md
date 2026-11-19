@@ -1,11 +1,11 @@
 ---
 name: whats-new
-description: "Tells the member what changed in the OtterBudget app, version by version, newest first, with each version's day and the link to its commit on GitHub. Use when the member asks what is new or what changed in OtterBudget, or what a version brought. Not for changes in their own portfolio, watchlist or spending (portfolio-briefing, watchlist-review, spending-check)."
+description: "Tells the member what changed in the OtterBudget app, version by version, newest first, with each version's day. Use when the member asks what is new or what changed in OtterBudget, or what a version brought. Not for changes in their own portfolio, watchlist or spending (portfolio-briefing, watchlist-review, spending-check)."
 ---
 
 # What's new
 
-Tell the member what changed in the OtterBudget app, from one read. Read only: this skill saves nothing. Give no change, detail or link that `list_whats_new` did not return.
+Tell the member what changed in the OtterBudget app, from one read. Read only: this skill saves nothing. Give no change, detail, commit, commit id or GitHub link that `list_whats_new` did not return.
 
 ## When it applies
 
@@ -15,7 +15,7 @@ Tell the member what changed in the OtterBudget app, from one read. Read only: t
 
 ## Inputs
 
-One call to `list_whats_new`. It returns `appVersion`, `entries` (newest first, each with `version`, `date` as YYYY-MM-DD, `lines` and `commitUrl`) and `more`.
+One call to `list_whats_new`. It returns `appVersion`, `entries` (newest first, each with `version`, `date` as YYYY-MM-DD and `lines`) and `more`.
 
 - The ask names no version and no period: call it with no argument. It returns the 10 newest entries.
 - The ask names a period ("this week", "since Monday", "in September"): pass the period's first day as `since`, its last day as `until` (today for a period that has not ended), both as YYYY-MM-DD in Bucharest time, and `limit` 100. A week starts on Monday.
@@ -28,7 +28,6 @@ Give the entries in the order returned. Each entry gives:
 1. Its version.
 2. Its day, written as "28 Oct 2026".
 3. Its lines, as the tool returned them.
-4. Its `commitUrl` as the commit link. When `commitUrl` is null, give no link.
 
 When `more` is true, end the answer with "Older versions are on the What's new page." and the page's address, https://otterbudget.vercel.app/whats-new.
 
