@@ -1,6 +1,6 @@
 {
   "name": "otterbudget",
-  "version": "1.15.1",
+  "version": "1.16.0",
   "description": "Your OtterBudget portfolio and spending in Claude: the connection to the OtterBudget MCP server and fifteen skills for gains, trades, allocation, rebalancing, the watchlist, spending, expenses, bank payments, payouts, earnings, a daily briefing, sell tax, cash, what's new in the app and importing from a sheet. Needs an OtterBudget account.",
   "author": { "name": "OtterBudget" },
   "homepage": "https://otterbudget.vercel.app/settings/mcp"
